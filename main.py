@@ -356,10 +356,17 @@ def count_by_text_bands_in_item_column(img):
             "height": round(float(b[1] - b[0]), 1)
         })
 
-        # Nếu fallback OCR-band không bắt được đủ dòng do scan mờ,
+    # Nếu fallback OCR-band không bắt được đủ dòng do scan mờ,
     # dùng layout cố định của bảng II.2 để không trả 0/7 dòng.
     if len(counted_rows) < 15:
-        estimated_row_count = 21
+        # Không cố định 21 nữa.
+        # Quy tắc tạm theo tín hiệu ảnh:
+        # - File ít dòng như 15.03.2026 thường raw_bands thấp.
+        # - File nhiều dòng như 19042026 thường raw_bands/candidate line cao hơn.
+        if len(bands) >= 12:
+            estimated_row_count = 34
+        else:
+            estimated_row_count = 21
 
         # Vùng thân bảng thực tế của file 15.03.2026:
         # bắt đầu dưới header, kết thúc trước chữ ký.
