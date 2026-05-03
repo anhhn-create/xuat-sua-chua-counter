@@ -59,7 +59,7 @@ def count_rows_from_image(image_path: str):
         15
     )
 
-    horizontal_kernel_width = max(40, w // 35)
+    horizontal_kernel_width = max(18, w // 80)
     horizontal_kernel = cv2.getStructuringElement(
         cv2.MORPH_RECT,
         (horizontal_kernel_width, 1)
@@ -83,7 +83,7 @@ def count_rows_from_image(image_path: str):
     for c in contours:
         x, y, ww, hh = cv2.boundingRect(c)
 
-        if ww >= w * 0.35 and hh <= max(8, h * 0.01):
+        if ww >= w * 0.12 and hh <= max(10, h * 0.015):
             segments.append({
                 "x": x,
                 "y": y,
@@ -116,7 +116,7 @@ def count_rows_from_image(image_path: str):
 
     groups = []
     current = []
-    max_gap = max(22, int(h * 0.035))
+    max_gap = max(35, int(h * 0.06))
 
     for y in candidate_y:
         if not current:
@@ -126,11 +126,11 @@ def count_rows_from_image(image_path: str):
         if y - current[-1] <= max_gap:
             current.append(y)
         else:
-            if len(current) >= 8:
+            if len(current) >= 4:
                 groups.append(current)
             current = [y]
 
-    if len(current) >= 8:
+    if len(current) >= 4:
         groups.append(current)
 
     if not groups:
